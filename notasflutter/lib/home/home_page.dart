@@ -65,7 +65,6 @@ class HomePageState extends State<HomePage> {
               height: 116.0,
               child: Stack(
                 children: <Widget>[
-                  //  contenedorFondo(context),
                   Positioned(
                     top: 33.0,
                     left: 3.0,
@@ -181,6 +180,7 @@ class HomePageState extends State<HomePage> {
 
     final SQLiteQuery sqLiteQuery = Provider.of<SQLiteQuery>(context);
     final iconoNotificacion = Provider.of<IconoProvider>(context);
+    startService(index);
 
     return Card(
       key: Key(sqLiteQuery.notas[index].id.toString()),
@@ -260,9 +260,6 @@ class HomePageState extends State<HomePage> {
                             "Notificacion de ${sqLiteQuery.notas[index].titulo} Activada"),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                      startService(
-                          context, sqLiteQuery.notas[index].fecha, index);
                     }
                   },
                 ),
@@ -279,17 +276,6 @@ class HomePageState extends State<HomePage> {
         .then((valor) {
       Provider.of<SQLiteQuery>(context, listen: false).updateNotas();
     });
-  }
-
-  SizedBox contenedorFondo(BuildContext context) {
-    return SizedBox(
-      //color: Colors.teal.shade800,
-      width: MediaQuery.of(context).size.width,
-      height: 20.0,
-      child: const Center(
-        child: Text(""),
-      ),
-    );
   }
 
   BoxDecoration cajadecoracion() {
@@ -359,8 +345,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> startService(
-      BuildContext context, String fecha, int index) async {
+  Future<void> startService(int index) async {
     dynamic value = await platform.invokeMethod('startService');
     print(value);
 
@@ -368,8 +353,8 @@ class HomePageState extends State<HomePage> {
         Provider.of<SQLiteQuery>(context, listen: false);
 
     var cron = Cron();
-    cron.schedule(Schedule.parse('* * * * *'), () async {
-      int diaActual = DateTime.now().minute.toInt();
+    cron.schedule(Schedule.parse('0 * * * *'), () async {
+      int diaActual = DateTime.now().day.toInt();
       int dia1 = diaActual + (1.toInt());
       int dia2 = diaActual + (2.toInt());
       int dia3 = diaActual + (3.toInt());
@@ -378,7 +363,7 @@ class HomePageState extends State<HomePage> {
       //8,10
       //3,5
       //sqLiteQuery.notas[index].hora.substring(3, 5)
-      if (dia5 <= int.parse(sqLiteQuery.notas[index].hora.substring(3, 5)) &&
+      if (dia5 <= int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
           sqLiteQuery.notas[index].fecha != '' &&
           sqLiteQuery.notas[index].hora != '') {
         setState(() {});
@@ -388,11 +373,11 @@ class HomePageState extends State<HomePage> {
             descripcion: sqLiteQuery.notas[index].descripcion,
             fecha: sqLiteQuery.notas[index].fecha,
             hora: sqLiteQuery.notas[index].hora,
-            boleano: (sqLiteQuery.notas[index].boleano = "true"),
+            boleano: sqLiteQuery.notas[index].boleano,
             color: (sqLiteQuery.notas[index].color = "0xFF1B5E20")));
       }
 
-      if (dia4 == int.parse(sqLiteQuery.notas[index].hora.substring(3, 5)) &&
+      if (dia4 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
           sqLiteQuery.notas[index].fecha != '' &&
           sqLiteQuery.notas[index].hora != '') {
         setState(() {});
@@ -402,11 +387,11 @@ class HomePageState extends State<HomePage> {
             descripcion: sqLiteQuery.notas[index].descripcion,
             fecha: sqLiteQuery.notas[index].fecha,
             hora: sqLiteQuery.notas[index].hora,
-            boleano: (sqLiteQuery.notas[index].boleano = "true"),
+            boleano: sqLiteQuery.notas[index].boleano,
             color: (sqLiteQuery.notas[index].color = "0xFF4CAF50")));
       }
 
-      if (dia3 == int.parse(sqLiteQuery.notas[index].hora.substring(3, 5)) &&
+      if (dia3 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
           sqLiteQuery.notas[index].fecha != '' &&
           sqLiteQuery.notas[index].hora != '') {
         setState(() {});
@@ -416,11 +401,11 @@ class HomePageState extends State<HomePage> {
             descripcion: sqLiteQuery.notas[index].descripcion,
             fecha: sqLiteQuery.notas[index].fecha,
             hora: sqLiteQuery.notas[index].hora,
-            boleano: (sqLiteQuery.notas[index].boleano = "true"),
+            boleano: sqLiteQuery.notas[index].boleano,
             color: (sqLiteQuery.notas[index].color = "0xFFFFC107")));
       }
 
-      if (dia2 == int.parse(sqLiteQuery.notas[index].hora.substring(3, 5)) &&
+      if (dia2 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
           sqLiteQuery.notas[index].fecha != '' &&
           sqLiteQuery.notas[index].hora != '') {
         setState(() {});
@@ -430,11 +415,11 @@ class HomePageState extends State<HomePage> {
             descripcion: sqLiteQuery.notas[index].descripcion,
             fecha: sqLiteQuery.notas[index].fecha,
             hora: sqLiteQuery.notas[index].hora,
-            boleano: (sqLiteQuery.notas[index].boleano = "true"),
+            boleano: sqLiteQuery.notas[index].boleano,
             color: (sqLiteQuery.notas[index].color = "0xFFFF6F00")));
       }
 
-      if (dia1 == int.parse(sqLiteQuery.notas[index].hora.substring(3, 5)) &&
+      if (dia1 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
           sqLiteQuery.notas[index].fecha != '' &&
           sqLiteQuery.notas[index].hora != '') {
         setState(() {});
@@ -444,18 +429,11 @@ class HomePageState extends State<HomePage> {
             descripcion: sqLiteQuery.notas[index].descripcion,
             fecha: sqLiteQuery.notas[index].fecha,
             hora: sqLiteQuery.notas[index].hora,
-            boleano: (sqLiteQuery.notas[index].boleano = "true"),
+            boleano: sqLiteQuery.notas[index].boleano,
             color: (sqLiteQuery.notas[index].color = "0xFFB71C1C")));
       }
     });
   }
-
-/*
-  Future<void> coloresCard(
-      int index, String fecha, BuildContext context) async {
-    
-  }
-*/
 }
 
 void initializeSetting() async {

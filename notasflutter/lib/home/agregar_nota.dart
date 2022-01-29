@@ -65,21 +65,6 @@ class FormularioState extends State<Formulario> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(
-                height: 4,
-              ),
-              _formTitulo(),
-              const SizedBox(
-                height: 4,
-              ),
-              _formDescripcion(),
-              const SizedBox(
-                height: 10,
-              ),
-              _formColor(),
-              const SizedBox(
-                height: 5,
-              ),
               Row(children: [
                 const Text(
                   "Notificación",
@@ -102,22 +87,26 @@ class FormularioState extends State<Formulario> {
                   autofocus: false,
                 ),
               ]),
-
-              // _formFecha(context),
-              /* const SizedBox(
-                height: 7,
-                ),*/
-              //   _formHora(context),
-              /*const SizedBox(
+              const SizedBox(
+                height: 8,
+              ),
+              _formTitulo(),
+              const SizedBox(
                 height: 10,
-                ), */
-
+              ),
+              _formDescripcion(),
+              const SizedBox(
+                height: 10,
+              ),
+              _formColor(),
+              const SizedBox(
+                height: 15,
+              ),
               ElevatedButton.icon(
                 /*style: ButtonStyle(
                    backgroundColor:MaterialStateProperty.all<Color>(Colors.white12), //Colors.amber
                  ),*/
                 //
-
                 label: const Text("Agregar"),
                 icon: const Icon(Icons.save),
                 onPressed: () => _guardar(context),

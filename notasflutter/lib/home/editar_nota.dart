@@ -67,21 +67,6 @@ class _Formulario extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(
-                height: 4,
-              ),
-              _formTitulo(),
-              const SizedBox(
-                height: 4,
-              ),
-              _formDescripcion(),
-              const SizedBox(
-                height: 4,
-              ),
-              _formColor(context),
-              const SizedBox(
-                height: 5,
-              ),
               Row(children: [
                 const Text(
                   "Notificación",
@@ -104,15 +89,20 @@ class _Formulario extends StatelessWidget {
                   autofocus: false,
                 ),
               ]),
-              /*
-              _formFecha(context),
               const SizedBox(
-                height: 7,
-                ),
-              _formHora(context)
-              ,*/
+                height: 8,
+              ),
+              _formTitulo(),
               const SizedBox(
-                height: 9,
+                height: 10,
+              ),
+              _formDescripcion(),
+              const SizedBox(
+                height: 10,
+              ),
+              _formColor(context),
+              const SizedBox(
+                height: 15,
               ),
               ElevatedButton.icon(
                 label: const Text("Actualizar"),

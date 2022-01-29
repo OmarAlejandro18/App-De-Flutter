@@ -38,16 +38,6 @@ class MaterialAppWithTheme extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Notas Flutter",
-      /*
-    localizationsDelegates: [
-    GlobalMaterialLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-     ],
-    supportedLocales: const [
-     Locale('us', 'US'), // English, no country code
-     Locale('es', 'ES'), // Spanish, no country code
-    ],*/
       theme: theme.getTheme(),
       initialRoute: "/",
       routes: getRutasVentanas(),

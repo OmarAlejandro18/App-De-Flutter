@@ -11,8 +11,9 @@ public class testservice extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(),"Servicio en Segundo Plano", Toast.LENGTH_LONG).show();
-        return START_NOT_STICKY;
+        Toast.makeText(getApplicationContext(),"Actualizando", Toast.LENGTH_LONG).show();
+        return super.onStartCommand(intent, flags, startId);
+        //return START_REDELIVER_INTENT;
     }
 
     @Override
