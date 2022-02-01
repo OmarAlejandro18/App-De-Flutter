@@ -349,90 +349,204 @@ class HomePageState extends State<HomePage> {
     dynamic value = await platform.invokeMethod('startService');
     print(value);
 
+    var cron = Cron();
+    cron.schedule(Schedule.parse('* * * * *'), () async {
+      int diaActual = DateTime.now().day.toInt();
+      int mesActual = DateTime.now().month.toInt();
+      //8,10
+      //3,5
+
+      if (diaActual <= 23) {
+        int dia1 = diaActual + (1.toInt());
+        int dia2 = diaActual + (2.toInt());
+        int dia3 = diaActual + (3.toInt());
+        int dia4 = diaActual + (4.toInt());
+        int dia5 = diaActual + (5.toInt());
+        diasMes(dia1, dia2, dia3, dia4, dia5, index);
+      }
+
+      if (mesActual == 2) {
+        if (diaActual == 28) {
+          diaActual = 0;
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+          diasMes(dia1, dia2, dia3, dia4, dia5, index);
+        }
+        if (diaActual > 23 && diaActual < 28) {
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+          if (dia1 <= 28 ||
+              dia2 <= 28 ||
+              dia3 <= 28 ||
+              dia4 <= 28 ||
+              dia5 <= 28) {
+            diasMes(dia1, dia2, dia3, dia4, dia5, index);
+          }
+        }
+      }
+
+      //Logica cuando la nota se redacta en los meses de 30 dias
+
+      if (mesActual == 4 ||
+          mesActual == 6 ||
+          mesActual == 9 ||
+          mesActual == 11) {
+        if (diaActual > 23 && diaActual < 30) {
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+
+          if (dia1 <= 30 ||
+              dia2 <= 30 ||
+              dia3 <= 30 ||
+              dia4 <= 30 ||
+              dia5 <= 30) {
+            diasMes(dia1, dia2, dia3, dia4, dia5, index);
+          }
+        }
+
+        if (diaActual == 30) {
+          diaActual = 0;
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+          diasMes(dia1, dia2, dia3, dia4, dia5, index);
+        }
+      }
+
+      //Logica cuando la nota se redacta en el mes donde tiene 31 dias
+      if (mesActual == 1.toInt() ||
+          mesActual == 3 ||
+          mesActual == 5 ||
+          mesActual == 7 ||
+          mesActual == 8 ||
+          mesActual == 10 ||
+          mesActual == 12) {
+        if (diaActual > 23 && diaActual < 31) {
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+          if (dia1 <= 31 ||
+              dia2 <= 31 ||
+              dia3 <= 31 ||
+              dia4 <= 31 ||
+              dia5 <= 31) {
+            diasMes(dia1, dia2, dia3, dia4, dia5, index);
+          }
+        }
+
+        if (diaActual == 31) {
+          diaActual = 0;
+          int dia1 = diaActual + (1.toInt());
+          int dia2 = diaActual + (2.toInt());
+          int dia3 = diaActual + (3.toInt());
+          int dia4 = diaActual + (4.toInt());
+          int dia5 = diaActual + (5.toInt());
+          diasMes(dia1, dia2, dia3, dia4, dia5, index);
+        }
+      }
+    });
+  }
+
+  //Logica del Color de las notas
+
+  diasMes(int dia1, int dia2, int dia3, int dia4, int dia5, int index) {
+    int mesActual = DateTime.now().month.toInt();
+
     final SQLiteQuery sqLiteQuery =
         Provider.of<SQLiteQuery>(context, listen: false);
 
-    var cron = Cron();
-    cron.schedule(Schedule.parse('0 * * * *'), () async {
-      int diaActual = DateTime.now().day.toInt();
-      int dia1 = diaActual + (1.toInt());
-      int dia2 = diaActual + (2.toInt());
-      int dia3 = diaActual + (3.toInt());
-      int dia4 = diaActual + (4.toInt());
-      int dia5 = diaActual + (5.toInt());
-      //8,10
-      //3,5
-      //sqLiteQuery.notas[index].hora.substring(3, 5)
-      if (dia5 <= int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
-          sqLiteQuery.notas[index].fecha != '' &&
-          sqLiteQuery.notas[index].hora != '') {
-        setState(() {});
-        SQLiteUpdate().nota(Nota(
-            id: sqLiteQuery.notas[index].id,
-            titulo: sqLiteQuery.notas[index].titulo,
-            descripcion: sqLiteQuery.notas[index].descripcion,
-            fecha: sqLiteQuery.notas[index].fecha,
-            hora: sqLiteQuery.notas[index].hora,
-            boleano: sqLiteQuery.notas[index].boleano,
-            color: (sqLiteQuery.notas[index].color = "0xFF1B5E20")));
-      }
+    if (dia5 <= int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
+        mesActual <=
+            int.parse(sqLiteQuery.notas[index].fecha.substring(5, 7)) &&
+        sqLiteQuery.notas[index].fecha != '' &&
+        sqLiteQuery.notas[index].hora != '') {
+      setState(() {});
+      SQLiteUpdate().nota(Nota(
+          id: sqLiteQuery.notas[index].id,
+          titulo: sqLiteQuery.notas[index].titulo,
+          descripcion: sqLiteQuery.notas[index].descripcion,
+          fecha: sqLiteQuery.notas[index].fecha,
+          hora: sqLiteQuery.notas[index].hora,
+          boleano: sqLiteQuery.notas[index].boleano,
+          color: (sqLiteQuery.notas[index].color = "0xFF1B5E20")));
+    }
 
-      if (dia4 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
-          sqLiteQuery.notas[index].fecha != '' &&
-          sqLiteQuery.notas[index].hora != '') {
-        setState(() {});
-        SQLiteUpdate().nota(Nota(
-            id: sqLiteQuery.notas[index].id,
-            titulo: sqLiteQuery.notas[index].titulo,
-            descripcion: sqLiteQuery.notas[index].descripcion,
-            fecha: sqLiteQuery.notas[index].fecha,
-            hora: sqLiteQuery.notas[index].hora,
-            boleano: sqLiteQuery.notas[index].boleano,
-            color: (sqLiteQuery.notas[index].color = "0xFF4CAF50")));
-      }
+    if (dia4 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
+        mesActual <=
+            int.parse(sqLiteQuery.notas[index].fecha.substring(5, 7)) &&
+        sqLiteQuery.notas[index].fecha != '' &&
+        sqLiteQuery.notas[index].hora != '') {
+      setState(() {});
+      SQLiteUpdate().nota(Nota(
+          id: sqLiteQuery.notas[index].id,
+          titulo: sqLiteQuery.notas[index].titulo,
+          descripcion: sqLiteQuery.notas[index].descripcion,
+          fecha: sqLiteQuery.notas[index].fecha,
+          hora: sqLiteQuery.notas[index].hora,
+          boleano: sqLiteQuery.notas[index].boleano,
+          color: (sqLiteQuery.notas[index].color = "0xFF4CAF50")));
+    }
 
-      if (dia3 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
-          sqLiteQuery.notas[index].fecha != '' &&
-          sqLiteQuery.notas[index].hora != '') {
-        setState(() {});
-        SQLiteUpdate().nota(Nota(
-            id: sqLiteQuery.notas[index].id,
-            titulo: sqLiteQuery.notas[index].titulo,
-            descripcion: sqLiteQuery.notas[index].descripcion,
-            fecha: sqLiteQuery.notas[index].fecha,
-            hora: sqLiteQuery.notas[index].hora,
-            boleano: sqLiteQuery.notas[index].boleano,
-            color: (sqLiteQuery.notas[index].color = "0xFFFFC107")));
-      }
+    if (dia3 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
+        mesActual <=
+            int.parse(sqLiteQuery.notas[index].fecha.substring(5, 7)) &&
+        sqLiteQuery.notas[index].fecha != '' &&
+        sqLiteQuery.notas[index].hora != '') {
+      setState(() {});
+      SQLiteUpdate().nota(Nota(
+          id: sqLiteQuery.notas[index].id,
+          titulo: sqLiteQuery.notas[index].titulo,
+          descripcion: sqLiteQuery.notas[index].descripcion,
+          fecha: sqLiteQuery.notas[index].fecha,
+          hora: sqLiteQuery.notas[index].hora,
+          boleano: sqLiteQuery.notas[index].boleano,
+          color: (sqLiteQuery.notas[index].color = "0xFFFFC107")));
+    }
 
-      if (dia2 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
-          sqLiteQuery.notas[index].fecha != '' &&
-          sqLiteQuery.notas[index].hora != '') {
-        setState(() {});
-        SQLiteUpdate().nota(Nota(
-            id: sqLiteQuery.notas[index].id,
-            titulo: sqLiteQuery.notas[index].titulo,
-            descripcion: sqLiteQuery.notas[index].descripcion,
-            fecha: sqLiteQuery.notas[index].fecha,
-            hora: sqLiteQuery.notas[index].hora,
-            boleano: sqLiteQuery.notas[index].boleano,
-            color: (sqLiteQuery.notas[index].color = "0xFFFF6F00")));
-      }
+    if (dia2 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
+        mesActual <=
+            int.parse(sqLiteQuery.notas[index].fecha.substring(5, 7)) &&
+        sqLiteQuery.notas[index].fecha != '' &&
+        sqLiteQuery.notas[index].hora != '') {
+      setState(() {});
+      SQLiteUpdate().nota(Nota(
+          id: sqLiteQuery.notas[index].id,
+          titulo: sqLiteQuery.notas[index].titulo,
+          descripcion: sqLiteQuery.notas[index].descripcion,
+          fecha: sqLiteQuery.notas[index].fecha,
+          hora: sqLiteQuery.notas[index].hora,
+          boleano: sqLiteQuery.notas[index].boleano,
+          color: (sqLiteQuery.notas[index].color = "0xFFFF6F00")));
+    }
 
-      if (dia1 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
-          sqLiteQuery.notas[index].fecha != '' &&
-          sqLiteQuery.notas[index].hora != '') {
-        setState(() {});
-        SQLiteUpdate().nota(Nota(
-            id: sqLiteQuery.notas[index].id,
-            titulo: sqLiteQuery.notas[index].titulo,
-            descripcion: sqLiteQuery.notas[index].descripcion,
-            fecha: sqLiteQuery.notas[index].fecha,
-            hora: sqLiteQuery.notas[index].hora,
-            boleano: sqLiteQuery.notas[index].boleano,
-            color: (sqLiteQuery.notas[index].color = "0xFFB71C1C")));
-      }
-    });
+    if (dia1 == int.parse(sqLiteQuery.notas[index].fecha.substring(8, 10)) &&
+        mesActual <=
+            int.parse(sqLiteQuery.notas[index].fecha.substring(5, 7)) &&
+        sqLiteQuery.notas[index].fecha != '' &&
+        sqLiteQuery.notas[index].hora != '') {
+      setState(() {});
+      SQLiteUpdate().nota(Nota(
+          id: sqLiteQuery.notas[index].id,
+          titulo: sqLiteQuery.notas[index].titulo,
+          descripcion: sqLiteQuery.notas[index].descripcion,
+          fecha: sqLiteQuery.notas[index].fecha,
+          hora: sqLiteQuery.notas[index].hora,
+          boleano: sqLiteQuery.notas[index].boleano,
+          color: (sqLiteQuery.notas[index].color = "0xFFB71C1C")));
+    }
   }
 }
 
